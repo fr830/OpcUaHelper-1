@@ -1,4 +1,9 @@
 
+本机KepWare测试
+
+OpcUa安装策略Node
+
+
 #单点读写测试
 
             OpcUaClient client = new OpcUaClient();
