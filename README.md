@@ -1,4 +1,6 @@
 
+Net FrameWork 4.5.2
+
 本机KepWare测试
 
 OpcUa安装策略Node
