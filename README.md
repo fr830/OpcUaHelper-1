@@ -1,5 +1,3 @@
-# OpcUaHelper
-opcua,匿名读写
 
 #单点读写测试
 
@@ -17,7 +15,7 @@ opcua,匿名读写
             retValue = client.ReadNode("ns=2;s=Channel1.Device1.Tag2");
             Console.WriteLine(retValue);
             
-            #多点读写测试
+#多点读写测试
             
             Console.WriteLine("多点读");
             var retValues = client.ReadNodes(new List<string> { "ns=2;s=Channel1.Device1.Tag1", "ns=2;s=Channel1.Device1.Tag2" });
@@ -28,7 +26,7 @@ opcua,匿名读写
             retValues = client.ReadNodes(new List<string> { "ns=2;s=Channel1.Device1.Tag1", "ns=2;s=Channel1.Device1.Tag2" });
             retValues.ForEach(x => Console.WriteLine(x));
             
-            #数据监控测试
+#数据监控测试
             
             client.AddSubscription("monitor", "ns=2;s=Channel1.Device1.Tag1", (string key, MonitoredItem monitoredItem, MonitoredItemNotificationEventArgs EventArgs) => {
                 Console.WriteLine(key + ":" + monitoredItem.StartNodeId + "->" + (EventArgs.NotificationValue as MonitoredItemNotification).Value.ToString());
