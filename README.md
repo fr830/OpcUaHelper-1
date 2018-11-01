@@ -37,5 +37,17 @@ OpcUa安装策略Node
                 Console.WriteLine(key + ":" + monitoredItem.StartNodeId + "->" + (EventArgs.NotificationValue as MonitoredItemNotification).Value.ToString());
             });
 
-            
+#节点浏览
+
+            var nodes = client.BrowseNodes();
+
+            nodes.ForEach(x => {
+                Console.WriteLine(x.NodeId);
+                var nodesnew = client.BrowseNodes(x);
+                nodesnew.ForEach(y =>
+                {
+                    Console.WriteLine(y.NodeId);
+                });
+            }
+            );
             
