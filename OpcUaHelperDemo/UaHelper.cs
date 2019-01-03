@@ -134,6 +134,11 @@ namespace Opc.Ua.UaHelper
 
 
         #region 数值读写
+        public T ReadNode<T>(string NodeId)
+        {
+            DataValue dataValue = ReadNode(NodeId, Attributes.Value);
+            return (T)dataValue.Value;
+        }
         public string ReadNode(string NodeId)
         {
             var result = ReadNode(NodeId, Attributes.Value);
@@ -198,6 +203,43 @@ namespace Opc.Ua.UaHelper
           out diagnosticInfos);
 
             return results.ToList();
+        }
+        public bool WriteNode<T>(string NodeId, T value)
+        {
+            WriteValue valueToWrite = new WriteValue()
+            {
+                NodeId = new NodeId(NodeId),
+                AttributeId = Attributes.Value
+            };
+            valueToWrite.Value.Value = value;
+            valueToWrite.Value.StatusCode = StatusCodes.Good;
+            valueToWrite.Value.ServerTimestamp = DateTime.MinValue;
+            valueToWrite.Value.SourceTimestamp = DateTime.MinValue;
+
+            WriteValueCollection valuesToWrite = new WriteValueCollection
+            {
+                valueToWrite
+            };
+
+            // 写入当前的值
+            StatusCodeCollection results = new StatusCodeCollection();
+            DiagnosticInfoCollection diagnosticInfos = new DiagnosticInfoCollection();
+
+            m_session.Write(
+                null,
+                valuesToWrite,
+                out results,
+                out diagnosticInfos);
+
+            ClientBase.ValidateResponse(results, valuesToWrite);
+            ClientBase.ValidateDiagnosticInfos(diagnosticInfos, valuesToWrite);
+
+            if (StatusCode.IsBad(results[0]))
+            {
+                throw new ServiceResultException(results[0]);
+            }
+
+            return !StatusCode.IsBad(results[0]);
         }
 
         public bool WriteNode(string NodeId, string Value)
